@@ -1,0 +1,13 @@
+C:\Users\III\Desktop\WPF\Homework01\NWModel\bin\Debug\NWModel.dll.config
+C:\Users\III\Desktop\WPF\Homework01\NWModel\bin\Debug\NWModel.dll
+C:\Users\III\Desktop\WPF\Homework01\NWModel\bin\Debug\NWModel.pdb
+C:\Users\III\Desktop\WPF\Homework01\NWModel\bin\Debug\EntityFramework.dll
+C:\Users\III\Desktop\WPF\Homework01\NWModel\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\III\Desktop\WPF\Homework01\NWModel\bin\Debug\EntityFramework.xml
+C:\Users\III\Desktop\WPF\Homework01\NWModel\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\III\Desktop\WPF\Homework01\NWModel\bin\Debug\zh-Hant\EntityFramework.resources.dll
+C:\Users\III\Desktop\WPF\Homework01\NWModel\obj\Debug\NWModel.csprojAssemblyReference.cache
+C:\Users\III\Desktop\WPF\Homework01\NWModel\obj\Debug\NWModel.csproj.CoreCompileInputs.cache
+C:\Users\III\Desktop\WPF\Homework01\NWModel\obj\Debug\NWModel.csproj.CopyComplete
+C:\Users\III\Desktop\WPF\Homework01\NWModel\obj\Debug\NWModel.dll
+C:\Users\III\Desktop\WPF\Homework01\NWModel\obj\Debug\NWModel.pdb

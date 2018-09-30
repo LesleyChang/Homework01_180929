@@ -1,0 +1,13 @@
+C:\Users\III\Desktop\WPF\Homework01\AWModel\bin\Debug\AWModel.dll.config
+C:\Users\III\Desktop\WPF\Homework01\AWModel\bin\Debug\AWModel.dll
+C:\Users\III\Desktop\WPF\Homework01\AWModel\bin\Debug\AWModel.pdb
+C:\Users\III\Desktop\WPF\Homework01\AWModel\bin\Debug\EntityFramework.dll
+C:\Users\III\Desktop\WPF\Homework01\AWModel\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\III\Desktop\WPF\Homework01\AWModel\bin\Debug\EntityFramework.xml
+C:\Users\III\Desktop\WPF\Homework01\AWModel\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\III\Desktop\WPF\Homework01\AWModel\bin\Debug\zh-Hant\EntityFramework.resources.dll
+C:\Users\III\Desktop\WPF\Homework01\AWModel\obj\Debug\AWModel.csprojAssemblyReference.cache
+C:\Users\III\Desktop\WPF\Homework01\AWModel\obj\Debug\AWModel.csproj.CoreCompileInputs.cache
+C:\Users\III\Desktop\WPF\Homework01\AWModel\obj\Debug\AWModel.csproj.CopyComplete
+C:\Users\III\Desktop\WPF\Homework01\AWModel\obj\Debug\AWModel.dll
+C:\Users\III\Desktop\WPF\Homework01\AWModel\obj\Debug\AWModel.pdb
