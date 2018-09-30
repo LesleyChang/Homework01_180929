@@ -11,3 +11,16 @@ C:\Users\III\Desktop\WPF\Homework01\NWModel\obj\Debug\NWModel.csproj.CoreCompile
 C:\Users\III\Desktop\WPF\Homework01\NWModel\obj\Debug\NWModel.csproj.CopyComplete
 C:\Users\III\Desktop\WPF\Homework01\NWModel\obj\Debug\NWModel.dll
 C:\Users\III\Desktop\WPF\Homework01\NWModel\obj\Debug\NWModel.pdb
+C:\Users\TEST\Documents\GitHub\Homework01_180929\NWModel\bin\Debug\NWModel.dll.config
+C:\Users\TEST\Documents\GitHub\Homework01_180929\NWModel\bin\Debug\NWModel.dll
+C:\Users\TEST\Documents\GitHub\Homework01_180929\NWModel\bin\Debug\NWModel.pdb
+C:\Users\TEST\Documents\GitHub\Homework01_180929\NWModel\bin\Debug\EntityFramework.dll
+C:\Users\TEST\Documents\GitHub\Homework01_180929\NWModel\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\TEST\Documents\GitHub\Homework01_180929\NWModel\bin\Debug\EntityFramework.xml
+C:\Users\TEST\Documents\GitHub\Homework01_180929\NWModel\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\TEST\Documents\GitHub\Homework01_180929\NWModel\bin\Debug\zh-Hant\EntityFramework.resources.dll
+C:\Users\TEST\Documents\GitHub\Homework01_180929\NWModel\obj\Debug\NWModel.csprojAssemblyReference.cache
+C:\Users\TEST\Documents\GitHub\Homework01_180929\NWModel\obj\Debug\NWModel.csproj.CoreCompileInputs.cache
+C:\Users\TEST\Documents\GitHub\Homework01_180929\NWModel\obj\Debug\NWModel.csproj.CopyComplete
+C:\Users\TEST\Documents\GitHub\Homework01_180929\NWModel\obj\Debug\NWModel.dll
+C:\Users\TEST\Documents\GitHub\Homework01_180929\NWModel\obj\Debug\NWModel.pdb

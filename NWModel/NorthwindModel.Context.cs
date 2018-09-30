@@ -19,7 +19,10 @@ namespace NWModel
             : base("name=NorthwindEntities")
         {
         }
-    
+        public NorthwindEntities(string nameOrConnectionString)
+            : base(nameOrConnectionString)
+        {
+        }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();

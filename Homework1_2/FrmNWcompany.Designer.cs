@@ -192,7 +192,7 @@
             this.Name_TextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Name_TextBox.Name = "Name_TextBox";
             this.Name_TextBox.Size = new System.Drawing.Size(100, 30);
-            this.Name_TextBox.Text = "a";
+            this.Name_TextBox.Text = "C";
             this.Name_TextBox.ToolTipText = "Product Name";
             // 
             // toolStripLabel2
@@ -342,14 +342,14 @@
             this.CategoryNameToolStripMenuItem.Checked = true;
             this.CategoryNameToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.CategoryNameToolStripMenuItem.Name = "CategoryNameToolStripMenuItem";
-            this.CategoryNameToolStripMenuItem.Size = new System.Drawing.Size(166, 26);
+            this.CategoryNameToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
             this.CategoryNameToolStripMenuItem.Tag = "CategoryName";
             this.CategoryNameToolStripMenuItem.Text = "CategoryName";
             // 
             // UnitPriceToolStripMenuItem1
             // 
             this.UnitPriceToolStripMenuItem1.Name = "UnitPriceToolStripMenuItem1";
-            this.UnitPriceToolStripMenuItem1.Size = new System.Drawing.Size(166, 26);
+            this.UnitPriceToolStripMenuItem1.Size = new System.Drawing.Size(216, 26);
             this.UnitPriceToolStripMenuItem1.Tag = "UnitPrice";
             this.UnitPriceToolStripMenuItem1.Text = "UnitPrice";
             // 
