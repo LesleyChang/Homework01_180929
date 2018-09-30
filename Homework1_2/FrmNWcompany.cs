@@ -5,6 +5,8 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -35,7 +37,7 @@ namespace Homework1_2
 
         }
 
-        
+
         private void LoadListView1Columns()
         {
             this.listView1.View = View.Details;
@@ -62,7 +64,7 @@ namespace Homework1_2
             string keyWord = this.Name_TextBox.Text.ToLower();
             decimal minPrice;
             decimal maxPrice;
-            if(!decimal.TryParse(MinPrice_TextBox.Text, out minPrice))
+            if (!decimal.TryParse(MinPrice_TextBox.Text, out minPrice))
             {
                 MessageBox.Show("Please re-type the Min-Price", "Not Reasonable Price");
                 this.MinPrice_TextBox.Text = "0";
@@ -76,7 +78,7 @@ namespace Homework1_2
                 this.MaxPrice_TextBox.Focus();
                 return;
             }
-            if(maxPrice < minPrice)
+            if (maxPrice < minPrice)
             {
                 string tempText = MinPrice_TextBox.Text;
                 MinPrice_TextBox.Text = MaxPrice_TextBox.Text;
@@ -85,7 +87,7 @@ namespace Homework1_2
                 minPrice = maxPrice;
                 maxPrice = minPrice;
             }
-            var q = dbContext.Products.Where(p => p.ProductName.ToLower().Contains(keyWord) 
+            var q = dbContext.Products.Where(p => p.ProductName.ToLower().Contains(keyWord)
                 && p.UnitPrice >= minPrice && p.UnitPrice <= maxPrice)
                 .Select(p => new { p.ProductID, p.ProductName, p.Categories.CategoryName, p.UnitsInStock, p.UnitPrice });
             this.dataGridView1.DataSource = null;
@@ -141,310 +143,311 @@ namespace Homework1_2
         private void TreeView_Btn_Click(object sender, EventArgs e)
         {
             this.treeView1.Nodes.Clear();
-            if (Arrange.Contains("Ascending"))
-            {
-                switch (OrderBy)
-                {
-                    case "ProductID":
-                        if (Group.Contains("CategoryName"))
-                        {
-                            var q = dbContext.Products.OrderBy(p => p.ProductID).AsEnumerable()
-                                .GroupBy(p => new { CategoryName = p.Categories.CategoryName })
-                                .Select(p => new
-                                {
-                                    CategoryName = $"{p.Key.CategoryName}({p.Count()})",
-                                    Count = p.Count(),
-                                    MinUnitPrice = p.Min(up => up.UnitPrice),
-                                    MaxUnitPrice = p.Max(up => up.UnitPrice),
-                                    group = p
-                                });
-                            this.dataGridView1.DataSource = q.ToList();
-                            foreach (var group in q)
-                            {
-                                TreeNode x = this.treeView1.Nodes.Add(group.CategoryName.ToString());
-                                foreach (var item in group.group)
-                                {
-                                    x.Nodes.Add($"{item.ProductName} - ${item.UnitPrice}");
-                                }
-                            }
-                            return;
-                        }
-                        if (Group.Contains("UnitPrice"))
-                        {
-                            var q = dbContext.Products.OrderBy(p => p.ProductID).AsEnumerable()
-                                .GroupBy(p => new { priceGroup = p.UnitPrice.GroupByUniPrice() })
-                                .Select(p => new
-                                {
-                                    PriceGroup = $"{p.Key.priceGroup}({p.Count()})",
-                                    Count = p.Count(),
-                                    MinUnitPrice = p.Min(up => up.UnitPrice),
-                                    MaxUnitPrice = p.Max(up => up.UnitPrice),
-                                    group = p
-                                });
-                            this.dataGridView1.DataSource = q.ToList();
-                            foreach (var group in q)
-                            {
-                                TreeNode x = this.treeView1.Nodes.Add(group.PriceGroup.ToString());
-                                foreach (var item in group.group)
-                                {
-                                    x.Nodes.Add($"{item.ProductName} - ${item.UnitPrice}");
-                                }
-                            }
-                            return;
-                        }
-                        break;
-                    case "ProductName":
-                        if (Group.Contains("CategoryName"))
-                        {
-                            var q = dbContext.Products.OrderBy(p => p.ProductName).AsEnumerable()
-                                .GroupBy(p => new { CategoryName = p.Categories.CategoryName })
-                                .Select(p => new
-                                {
-                                    CategoryName = $"{p.Key.CategoryName}({p.Count()})",
-                                    Count = p.Count(),
-                                    MinUnitPrice = p.Min(up => up.UnitPrice),
-                                    MaxUnitPrice = p.Max(up => up.UnitPrice),
-                                    group = p
-                                });
-                            this.dataGridView1.DataSource = q.ToList();
-                            foreach (var group in q)
-                            {
-                                TreeNode x = this.treeView1.Nodes.Add(group.CategoryName.ToString());
-                                foreach (var item in group.group)
-                                {
-                                    x.Nodes.Add($"{item.ProductName} - ${item.UnitPrice}");
-                                }
-                            }
-                            return;
-                        }
-                        if (Group.Contains("UnitPrice"))
-                        {
-                            var q = dbContext.Products.OrderBy(p => p.ProductName).AsEnumerable()
-                                .GroupBy(p => new { priceGroup = p.UnitPrice.GroupByUniPrice() })
-                                .Select(p => new
-                                {
-                                    PriceGroup = $"{p.Key.priceGroup}({p.Count()})",
-                                    Count = p.Count(),
-                                    MinUnitPrice = p.Min(up => up.UnitPrice),
-                                    MaxUnitPrice = p.Max(up => up.UnitPrice),
-                                    group = p
-                                });
-                            this.dataGridView1.DataSource = q.ToList();
-                            foreach (var group in q)
-                            {
-                                TreeNode x = this.treeView1.Nodes.Add(group.PriceGroup.ToString());
-                                foreach (var item in group.group)
-                                {
-                                    x.Nodes.Add($"{item.ProductName} - ${item.UnitPrice}");
-                                }
-                            }
-                            return;
-                        }
-                        break;
-                    case "UnitPrice":
-                        if (Group.Contains("CategoryName"))
-                        {
-                            var q = dbContext.Products.OrderBy(p => p.UnitPrice).AsEnumerable()
-                                .GroupBy(p => new { CategoryName = p.Categories.CategoryName })
-                                .Select(p => new
-                                {
-                                    CategoryName = $"{p.Key.CategoryName}({p.Count()})",
-                                    Count = p.Count(),
-                                    MinUnitPrice = p.Min(up => up.UnitPrice),
-                                    MaxUnitPrice = p.Max(up => up.UnitPrice),
-                                    group = p
-                                });
-                            this.dataGridView1.DataSource = q.ToList();
-                            foreach (var group in q)
-                            {
-                                TreeNode x = this.treeView1.Nodes.Add(group.CategoryName.ToString());
-                                foreach (var item in group.group)
-                                {
-                                    x.Nodes.Add($"{item.ProductName} - ${item.UnitPrice}");
-                                }
-                            }
-                            return;
-                        }
-                        if (Group.Contains("UnitPrice"))
-                        {
-                            var q = dbContext.Products.OrderBy(p => p.UnitPrice).AsEnumerable()
-                                .GroupBy(p => new { priceGroup = p.UnitPrice.GroupByUniPrice() })
-                                .Select(p => new
-                                {
-                                    PriceGroup = $"{p.Key.priceGroup}({p.Count()})",
-                                    Count = p.Count(),
-                                    MinUnitPrice = p.Min(up => up.UnitPrice),
-                                    MaxUnitPrice = p.Max(up => up.UnitPrice),
-                                    group = p
-                                });
-                            this.dataGridView1.DataSource = q.ToList();
-                            foreach (var group in q)
-                            {
-                                TreeNode x = this.treeView1.Nodes.Add(group.PriceGroup.ToString());
-                                foreach (var item in group.group)
-                                {
-                                    x.Nodes.Add($"{item.ProductName} - ${item.UnitPrice}");
-                                }
-                            }
-                            return;
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            }
-            else
-            {
-                switch (OrderBy)
-                {
-                    case "ProductID":
-                        if (Group.Contains("CategoryName"))
-                        {
-                            var q = dbContext.Products.OrderByDescending(p => p.ProductID).AsEnumerable()
-                                .GroupBy(p => new { CategoryName = p.Categories.CategoryName })
-                                .Select(p => new
-                                {
-                                    CategoryName = $"{p.Key.CategoryName}({p.Count()})",
-                                    Count = p.Count(),
-                                    MinUnitPrice = p.Min(up => up.UnitPrice),
-                                    MaxUnitPrice = p.Max(up => up.UnitPrice),
-                                    group = p
-                                });
-                            this.dataGridView1.DataSource = q.ToList();
-                            foreach (var group in q)
-                            {
-                                TreeNode x = this.treeView1.Nodes.Add(group.CategoryName.ToString());
-                                foreach (var item in group.group)
-                                {
-                                    x.Nodes.Add($"{item.ProductName} - ${item.UnitPrice}");
-                                }
-                            }
-                            return;
-                        }
-                        if (Group.Contains("UnitPrice"))
-                        {
-                            var q = dbContext.Products.OrderByDescending(p => p.ProductID).AsEnumerable()
-                                .GroupBy(p => new { priceGroup = p.UnitPrice.GroupByUniPrice() })
-                                .Select(p => new
-                                {
-                                    PriceGroup = $"{p.Key.priceGroup}({p.Count()})",
-                                    Count = p.Count(),
-                                    MinUnitPrice = p.Min(up => up.UnitPrice),
-                                    MaxUnitPrice = p.Max(up => up.UnitPrice),
-                                    group = p
-                                });
-                            this.dataGridView1.DataSource = q.ToList();
-                            foreach (var group in q)
-                            {
-                                TreeNode x = this.treeView1.Nodes.Add(group.PriceGroup.ToString());
-                                foreach (var item in group.group)
-                                {
-                                    x.Nodes.Add($"{item.ProductName} - ${item.UnitPrice}");
-                                }
-                            }
-                            return;
-                        }
-                        break;
-                    case "ProductName":
-                        if (Group.Contains("CategoryName"))
-                        {
-                            var q = dbContext.Products.OrderByDescending(p => p.ProductName).AsEnumerable()
-                                .GroupBy(p => new { CategoryName = p.Categories.CategoryName })
-                                .Select(p => new
-                                {
-                                    CategoryName = $"{p.Key.CategoryName}({p.Count()})",
-                                    Count = p.Count(),
-                                    MinUnitPrice = p.Min(up => up.UnitPrice),
-                                    MaxUnitPrice = p.Max(up => up.UnitPrice),
-                                    group = p
-                                });
-                            this.dataGridView1.DataSource = q.ToList();
-                            foreach (var group in q)
-                            {
-                                TreeNode x = this.treeView1.Nodes.Add(group.CategoryName.ToString());
-                                foreach (var item in group.group)
-                                {
-                                    x.Nodes.Add($"{item.ProductName} - ${item.UnitPrice}");
-                                }
-                            }
-                            return;
-                        }
-                        if (Group.Contains("UnitPrice"))
-                        {
-                            var q = dbContext.Products.OrderByDescending(p => p.ProductName).AsEnumerable()
-                                .GroupBy(p => new { priceGroup = p.UnitPrice.GroupByUniPrice() })
-                                .Select(p => new
-                                {
-                                    PriceGroup = $"{p.Key.priceGroup}({p.Count()})",
-                                    Count = p.Count(),
-                                    MinUnitPrice = p.Min(up => up.UnitPrice),
-                                    MaxUnitPrice = p.Max(up => up.UnitPrice),
-                                    group = p
-                                });
-                            this.dataGridView1.DataSource = q.ToList();
-                            foreach (var group in q)
-                            {
-                                TreeNode x = this.treeView1.Nodes.Add(group.PriceGroup.ToString());
-                                foreach (var item in group.group)
-                                {
-                                    x.Nodes.Add($"{item.ProductName} - ${item.UnitPrice}");
-                                }
-                            }
-                            return;
-                        }
-                        break;
-                    case "UnitPrice":
-                        if (Group.Contains("CategoryName"))
-                        {
-                            var q = dbContext.Products.OrderByDescending(p => p.UnitPrice).AsEnumerable()
-                                .GroupBy(p => new { CategoryName = p.Categories.CategoryName })
-                                .Select(p => new
-                                {
-                                    CategoryName = $"{p.Key.CategoryName}({p.Count()})",
-                                    Count = p.Count(),
-                                    MinUnitPrice = p.Min(up => up.UnitPrice),
-                                    MaxUnitPrice = p.Max(up => up.UnitPrice),
-                                    group = p
-                                });
-                            this.dataGridView1.DataSource = q.ToList();
-                            foreach (var group in q)
-                            {
-                                TreeNode x = this.treeView1.Nodes.Add(group.CategoryName.ToString());
-                                foreach (var item in group.group)
-                                {
-                                    x.Nodes.Add($"{item.ProductName} - ${item.UnitPrice}");
-                                }
-                            }
-                            return;
-                        }
-                        if (Group.Contains("UnitPrice"))
-                        {
-                            var q = dbContext.Products.OrderByDescending(p => p.UnitPrice).AsEnumerable()
-                                .GroupBy(p => new { priceGroup = p.UnitPrice.GroupByUniPrice() })
-                                .Select(p => new
-                                {
-                                    PriceGroup = $"{p.Key.priceGroup}({p.Count()})",
-                                    Count = p.Count(),
-                                    MinUnitPrice = p.Min(up => up.UnitPrice),
-                                    MaxUnitPrice = p.Max(up => up.UnitPrice),
-                                    group = p
-                                });
-                            this.dataGridView1.DataSource = q.ToList();
-                            foreach (var group in q)
-                            {
-                                TreeNode x = this.treeView1.Nodes.Add(group.PriceGroup.ToString());
-                                foreach (var item in group.group)
-                                {
-                                    x.Nodes.Add($"{item.ProductName} - ${item.UnitPrice}");
-                                }
-                            }
-                            return;
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            }
+            //var orderPara = Expression.Parameter()
+            //if (Arrange.Contains("Ascending"))
+            //{
+            //    switch (OrderBy)
+            //    {
+            //        case "ProductID":
+            //            if (Group.Contains("CategoryName"))
+            //            {
+            //                var q = dbContext.Products.OrderBy(p => p.ProductID).AsEnumerable()
+            //                    .GroupBy(p => new { CategoryName = p.Categories.CategoryName })
+            //                    .Select(p => new
+            //                    {
+            //                        CategoryName = $"{p.Key.CategoryName}({p.Count()})",
+            //                        Count = p.Count(),
+            //                        MinUnitPrice = p.Min(up => up.UnitPrice),
+            //                        MaxUnitPrice = p.Max(up => up.UnitPrice),
+            //                        group = p
+            //                    });
+            //                this.dataGridView1.DataSource = q.ToList();
+            //                foreach (var group in q)
+            //                {
+            //                    TreeNode x = this.treeView1.Nodes.Add(group.CategoryName.ToString());
+            //                    foreach (var item in group.group)
+            //                    {
+            //                        x.Nodes.Add($"{item.ProductName} - ${item.UnitPrice}");
+            //                    }
+            //                }
+            //                return;
+            //            }
+            //            if (Group.Contains("UnitPrice"))
+            //            {
+            //                var q = dbContext.Products.OrderBy(p => p.ProductID).AsEnumerable()
+            //                    .GroupBy(p => new { priceGroup = p.UnitPrice.GroupByUniPrice() })
+            //                    .Select(p => new
+            //                    {
+            //                        PriceGroup = $"{p.Key.priceGroup}({p.Count()})",
+            //                        Count = p.Count(),
+            //                        MinUnitPrice = p.Min(up => up.UnitPrice),
+            //                        MaxUnitPrice = p.Max(up => up.UnitPrice),
+            //                        group = p
+            //                    });
+            //                this.dataGridView1.DataSource = q.ToList();
+            //                foreach (var group in q)
+            //                {
+            //                    TreeNode x = this.treeView1.Nodes.Add(group.PriceGroup.ToString());
+            //                    foreach (var item in group.group)
+            //                    {
+            //                        x.Nodes.Add($"{item.ProductName} - ${item.UnitPrice}");
+            //                    }
+            //                }
+            //                return;
+            //            }
+            //            break;
+            //        case "ProductName":
+            //            if (Group.Contains("CategoryName"))
+            //            {
+            //                var q = dbContext.Products.OrderBy(p => p.ProductName).AsEnumerable()
+            //                    .GroupBy(p => new { CategoryName = p.Categories.CategoryName })
+            //                    .Select(p => new
+            //                    {
+            //                        CategoryName = $"{p.Key.CategoryName}({p.Count()})",
+            //                        Count = p.Count(),
+            //                        MinUnitPrice = p.Min(up => up.UnitPrice),
+            //                        MaxUnitPrice = p.Max(up => up.UnitPrice),
+            //                        group = p
+            //                    });
+            //                this.dataGridView1.DataSource = q.ToList();
+            //                foreach (var group in q)
+            //                {
+            //                    TreeNode x = this.treeView1.Nodes.Add(group.CategoryName.ToString());
+            //                    foreach (var item in group.group)
+            //                    {
+            //                        x.Nodes.Add($"{item.ProductName} - ${item.UnitPrice}");
+            //                    }
+            //                }
+            //                return;
+            //            }
+            //            if (Group.Contains("UnitPrice"))
+            //            {
+            //                var q = dbContext.Products.OrderBy(p => p.ProductName).AsEnumerable()
+            //                    .GroupBy(p => new { priceGroup = p.UnitPrice.GroupByUniPrice() })
+            //                    .Select(p => new
+            //                    {
+            //                        PriceGroup = $"{p.Key.priceGroup}({p.Count()})",
+            //                        Count = p.Count(),
+            //                        MinUnitPrice = p.Min(up => up.UnitPrice),
+            //                        MaxUnitPrice = p.Max(up => up.UnitPrice),
+            //                        group = p
+            //                    });
+            //                this.dataGridView1.DataSource = q.ToList();
+            //                foreach (var group in q)
+            //                {
+            //                    TreeNode x = this.treeView1.Nodes.Add(group.PriceGroup.ToString());
+            //                    foreach (var item in group.group)
+            //                    {
+            //                        x.Nodes.Add($"{item.ProductName} - ${item.UnitPrice}");
+            //                    }
+            //                }
+            //                return;
+            //            }
+            //            break;
+            //        case "UnitPrice":
+            //            if (Group.Contains("CategoryName"))
+            //            {
+            //                var q = dbContext.Products.OrderBy(p => p.UnitPrice).AsEnumerable()
+            //                    .GroupBy(p => new { CategoryName = p.Categories.CategoryName })
+            //                    .Select(p => new
+            //                    {
+            //                        CategoryName = $"{p.Key.CategoryName}({p.Count()})",
+            //                        Count = p.Count(),
+            //                        MinUnitPrice = p.Min(up => up.UnitPrice),
+            //                        MaxUnitPrice = p.Max(up => up.UnitPrice),
+            //                        group = p
+            //                    });
+            //                this.dataGridView1.DataSource = q.ToList();
+            //                foreach (var group in q)
+            //                {
+            //                    TreeNode x = this.treeView1.Nodes.Add(group.CategoryName.ToString());
+            //                    foreach (var item in group.group)
+            //                    {
+            //                        x.Nodes.Add($"{item.ProductName} - ${item.UnitPrice}");
+            //                    }
+            //                }
+            //                return;
+            //            }
+            //            if (Group.Contains("UnitPrice"))
+            //            {
+            //                var q = dbContext.Products.OrderBy(p => p.UnitPrice).AsEnumerable()
+            //                    .GroupBy(p => new { priceGroup = p.UnitPrice.GroupByUniPrice() })
+            //                    .Select(p => new
+            //                    {
+            //                        PriceGroup = $"{p.Key.priceGroup}({p.Count()})",
+            //                        Count = p.Count(),
+            //                        MinUnitPrice = p.Min(up => up.UnitPrice),
+            //                        MaxUnitPrice = p.Max(up => up.UnitPrice),
+            //                        group = p
+            //                    });
+            //                this.dataGridView1.DataSource = q.ToList();
+            //                foreach (var group in q)
+            //                {
+            //                    TreeNode x = this.treeView1.Nodes.Add(group.PriceGroup.ToString());
+            //                    foreach (var item in group.group)
+            //                    {
+            //                        x.Nodes.Add($"{item.ProductName} - ${item.UnitPrice}");
+            //                    }
+            //                }
+            //                return;
+            //            }
+            //            break;
+            //        default:
+            //            break;
+            //    }
+            //}
+            //else
+            //{
+            //    switch (OrderBy)
+            //    {
+            //        case "ProductID":
+            //            if (Group.Contains("CategoryName"))
+            //            {
+            //                var q = dbContext.Products.OrderByDescending(p => p.ProductID).AsEnumerable()
+            //                    .GroupBy(p => new { CategoryName = p.Categories.CategoryName })
+            //                    .Select(p => new
+            //                    {
+            //                        CategoryName = $"{p.Key.CategoryName}({p.Count()})",
+            //                        Count = p.Count(),
+            //                        MinUnitPrice = p.Min(up => up.UnitPrice),
+            //                        MaxUnitPrice = p.Max(up => up.UnitPrice),
+            //                        group = p
+            //                    });
+            //                this.dataGridView1.DataSource = q.ToList();
+            //                foreach (var group in q)
+            //                {
+            //                    TreeNode x = this.treeView1.Nodes.Add(group.CategoryName.ToString());
+            //                    foreach (var item in group.group)
+            //                    {
+            //                        x.Nodes.Add($"{item.ProductName} - ${item.UnitPrice}");
+            //                    }
+            //                }
+            //                return;
+            //            }
+            //            if (Group.Contains("UnitPrice"))
+            //            {
+            //                var q = dbContext.Products.OrderByDescending(p => p.ProductID).AsEnumerable()
+            //                    .GroupBy(p => new { priceGroup = p.UnitPrice.GroupByUniPrice() })
+            //                    .Select(p => new
+            //                    {
+            //                        PriceGroup = $"{p.Key.priceGroup}({p.Count()})",
+            //                        Count = p.Count(),
+            //                        MinUnitPrice = p.Min(up => up.UnitPrice),
+            //                        MaxUnitPrice = p.Max(up => up.UnitPrice),
+            //                        group = p
+            //                    });
+            //                this.dataGridView1.DataSource = q.ToList();
+            //                foreach (var group in q)
+            //                {
+            //                    TreeNode x = this.treeView1.Nodes.Add(group.PriceGroup.ToString());
+            //                    foreach (var item in group.group)
+            //                    {
+            //                        x.Nodes.Add($"{item.ProductName} - ${item.UnitPrice}");
+            //                    }
+            //                }
+            //                return;
+            //            }
+            //            break;
+            //        case "ProductName":
+            //            if (Group.Contains("CategoryName"))
+            //            {
+            //                var q = dbContext.Products.OrderByDescending(p => p.ProductName).AsEnumerable()
+            //                    .GroupBy(p => new { CategoryName = p.Categories.CategoryName })
+            //                    .Select(p => new
+            //                    {
+            //                        CategoryName = $"{p.Key.CategoryName}({p.Count()})",
+            //                        Count = p.Count(),
+            //                        MinUnitPrice = p.Min(up => up.UnitPrice),
+            //                        MaxUnitPrice = p.Max(up => up.UnitPrice),
+            //                        group = p
+            //                    });
+            //                this.dataGridView1.DataSource = q.ToList();
+            //                foreach (var group in q)
+            //                {
+            //                    TreeNode x = this.treeView1.Nodes.Add(group.CategoryName.ToString());
+            //                    foreach (var item in group.group)
+            //                    {
+            //                        x.Nodes.Add($"{item.ProductName} - ${item.UnitPrice}");
+            //                    }
+            //                }
+            //                return;
+            //            }
+            //            if (Group.Contains("UnitPrice"))
+            //            {
+            //                var q = dbContext.Products.OrderByDescending(p => p.ProductName).AsEnumerable()
+            //                    .GroupBy(p => new { priceGroup = p.UnitPrice.GroupByUniPrice() })
+            //                    .Select(p => new
+            //                    {
+            //                        PriceGroup = $"{p.Key.priceGroup}({p.Count()})",
+            //                        Count = p.Count(),
+            //                        MinUnitPrice = p.Min(up => up.UnitPrice),
+            //                        MaxUnitPrice = p.Max(up => up.UnitPrice),
+            //                        group = p
+            //                    });
+            //                this.dataGridView1.DataSource = q.ToList();
+            //                foreach (var group in q)
+            //                {
+            //                    TreeNode x = this.treeView1.Nodes.Add(group.PriceGroup.ToString());
+            //                    foreach (var item in group.group)
+            //                    {
+            //                        x.Nodes.Add($"{item.ProductName} - ${item.UnitPrice}");
+            //                    }
+            //                }
+            //                return;
+            //            }
+            //            break;
+            //        case "UnitPrice":
+            //            if (Group.Contains("CategoryName"))
+            //            {
+            //                var q = dbContext.Products.OrderByDescending(p => p.UnitPrice).AsEnumerable()
+            //                    .GroupBy(p => new { CategoryName = p.Categories.CategoryName })
+            //                    .Select(p => new
+            //                    {
+            //                        CategoryName = $"{p.Key.CategoryName}({p.Count()})",
+            //                        Count = p.Count(),
+            //                        MinUnitPrice = p.Min(up => up.UnitPrice),
+            //                        MaxUnitPrice = p.Max(up => up.UnitPrice),
+            //                        group = p
+            //                    });
+            //                this.dataGridView1.DataSource = q.ToList();
+            //                foreach (var group in q)
+            //                {
+            //                    TreeNode x = this.treeView1.Nodes.Add(group.CategoryName.ToString());
+            //                    foreach (var item in group.group)
+            //                    {
+            //                        x.Nodes.Add($"{item.ProductName} - ${item.UnitPrice}");
+            //                    }
+            //                }
+            //                return;
+            //            }
+            //            if (Group.Contains("UnitPrice"))
+            //            {
+            //                var q = dbContext.Products.OrderByDescending(p => p.UnitPrice).AsEnumerable()
+            //                    .GroupBy(p => new { priceGroup = p.UnitPrice.GroupByUniPrice() })
+            //                    .Select(p => new
+            //                    {
+            //                        PriceGroup = $"{p.Key.priceGroup}({p.Count()})",
+            //                        Count = p.Count(),
+            //                        MinUnitPrice = p.Min(up => up.UnitPrice),
+            //                        MaxUnitPrice = p.Max(up => up.UnitPrice),
+            //                        group = p
+            //                    });
+            //                this.dataGridView1.DataSource = q.ToList();
+            //                foreach (var group in q)
+            //                {
+            //                    TreeNode x = this.treeView1.Nodes.Add(group.PriceGroup.ToString());
+            //                    foreach (var item in group.group)
+            //                    {
+            //                        x.Nodes.Add($"{item.ProductName} - ${item.UnitPrice}");
+            //                    }
+            //                }
+            //                return;
+            //            }
+            //            break;
+            //        default:
+            //            break;
+            //    }
+            //}
 
         }
         private void ListView_Btn_Click(object sender, EventArgs e)
@@ -926,7 +929,17 @@ namespace Homework1_2
 
         #endregion
 
-        
-    }
 
+    }
+    public static class IQueryableExtension
+    {
+        private static MethodInfo orderbyAscInfo = null;
+        private static MethodInfo orderbyDescInfo = null;
+        public static IQueryable<T> OrderBy<T>(this IQueryable<T> query, string property) where T : class
+        {
+            Type entityType = typeof(T);
+            Type entityPropertyType = entityType.GetProperty(property).PropertyType;
+            var orderPara = Expression.Parameter(entityType, "o");
+        }
+    }
 }
